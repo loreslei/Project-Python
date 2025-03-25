@@ -48,20 +48,20 @@ def baixar_arquivos_web():
     servico = Service(ChromeDriverManager().install())
     navegador = webdriver.Chrome(service=servico, options=chrome_options)
 
-    link_gov = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
+    LINK_GOV = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
 
-    navegador.get(link_gov)
+    navegador.get(LINK_GOV)
 
-    xpath_cookies = '/html/body/div[5]/div/div/div/div/div[2]/button[3]'
-    xpath_anexo1 = '//*[@id="cfec435d-6921-461f-b85a-b425bc3cb4a5"]/div/ol/li[1]/a[1]'
-    xpath_anexo2 = '//*[@id="cfec435d-6921-461f-b85a-b425bc3cb4a5"]/div/ol/li[2]/a'
+    XPATH_COOKIES = '/html/body/div[5]/div/div/div/div/div[2]/button[3]'
+    XPATH_ANEXO1 = '//*[@id="cfec435d-6921-461f-b85a-b425bc3cb4a5"]/div/ol/li[1]/a[1]'
+    XPATH_ANEXO2 = '//*[@id="cfec435d-6921-461f-b85a-b425bc3cb4a5"]/div/ol/li[2]/a'
 
-    if clicar_elemento(navegador, xpath_cookies):
-        link_anexo_I = navegador.find_element(By.XPATH, xpath_anexo1).get_attribute('href')
-        baixar_arquivo(link_anexo_I, "anexoI.pdf")
+    if clicar_elemento(navegador, XPATH_COOKIES):
+        LINK_ANEXO_I = navegador.find_element(By.XPATH, XPATH_ANEXO1).get_attribute('href')
+        baixar_arquivo(LINK_ANEXO_I, "anexoI.pdf")
 
-        link_anexo_II = navegador.find_element(By.XPATH, xpath_anexo2).get_attribute('href')
-        baixar_arquivo(link_anexo_II, "anexoII.pdf")
+        LINK_ANEXO_II = navegador.find_element(By.XPATH, XPATH_ANEXO2).get_attribute('href')
+        baixar_arquivo(LINK_ANEXO_II, "anexoII.pdf")
 
     navegador.quit()
     logging.info("Download concluído.")
