@@ -11,29 +11,46 @@ DIRETORIO_ANEXO_I = "../Web_Scraping/anexoI.pdf"
 NOME_ARQUIVO = "anexoI.csv"
 NOME_ZIP = "Teste_Lorenna.zip"
 
-# 2.4.
-# Substitua as abreviações das colunas OD e AMB pelas descrições completas, conforme a legenda no rodapé.
-
 PARTS = []
+SUBSTITUICOES = []
 
 def visitor_body(text, cm, tm, fontDict, fontSize):
     y = tm[5]
     if y < 50:
         if text != "" and text != "\n":
-            PARTS.append(text)
+            PARTS.append(text.split(": "))
 
-def extrair_conteudo(arquivo):
-    reader = PdfReader(arquivo)
-    page = reader.pages[2]
+def subst_palavras(pdf, arquivo):
+
+    page = PdfReader(pdf).pages[2]
     page.extract_text(visitor_text=visitor_body)
-    text_body = "".join(PARTS)
     # OD: Seg. Odontológica
+    SUBSTITUICOES.append(PARTS[0][1])
     # AMB: Seg. Ambulatorial
-    print(PARTS)
+    SUBSTITUICOES.append(PARTS[1][1])
 
-def transformar_em_csv(diretorio, arquivo):
-    tabula.convert_into(diretorio, arquivo, output_format="csv", pages='3-181')
-    data_frame_anexo = pd.read_csv(arquivo)
+    df = pd.read_csv(arquivo)
+    df["OD"] = df["OD"].str.replace("OD", SUBSTITUICOES[0], regex=True)
+    df["AMB"] = df["AMB"].str.replace("AMB", SUBSTITUICOES[1], regex=True)
+
+    df = df.rename(columns={
+        "OD": SUBSTITUICOES[0],
+        "AMB": SUBSTITUICOES[1]
+    })
+
+    df.to_csv(arquivo, index=False)
+
+
+
+def extrair_conteudo(pdf):
+    lista_tabelas = tabula.read_pdf(pdf, pages='3-181')
+    print(lista_tabelas)
+
+
+def transformar_em_csv(pdf, novo_arquivo):
+    tabula.convert_into(pdf, novo_arquivo, output_format="csv", pages='3-181')
+    subst_palavras(pdf, novo_arquivo)
+    data_frame_anexo = pd.read_csv(novo_arquivo)
     print(tabulate(data_frame_anexo, headers='keys'))
 
 def zipar(arquivo, diretorio_zip):
@@ -42,19 +59,17 @@ def zipar(arquivo, diretorio_zip):
         logging.info(f"Arquivo '{NOME_ARQUIVO}' adicionado ao zip.")
 
 
-#
-# if os.path.exists(NOME_ARQUIVO):
-#     zipar(NOME_ARQUIVO, NOME_ZIP)
-# else:
-#     logging.warning(f"Arquivo '{NOME_ARQUIVO}' não encontrado.")
-#     if os.path.exists(DIRETORIO_ANEXO_I):
-#         extrair_conteudo(NOME_ARQUIVO)
-#         transformar_em_csv(DIRETORIO_ANEXO_I, NOME_ARQUIVO)
-#         zipar(NOME_ARQUIVO, NOME_ZIP)
-#     else:
-#         logging.warning(f"Arquivo '{DIRETORIO_ANEXO_I}' não encontrado.")
+
+if os.path.exists(NOME_ARQUIVO):
+    zipar(NOME_ARQUIVO, NOME_ZIP)
+else:
+    logging.warning(f"Arquivo '{NOME_ARQUIVO}' não encontrado.")
+    if os.path.exists(DIRETORIO_ANEXO_I):
+        extrair_conteudo(DIRETORIO_ANEXO_I)
+        transformar_em_csv(DIRETORIO_ANEXO_I, NOME_ARQUIVO)
+        zipar(NOME_ARQUIVO, NOME_ZIP)
+    else:
+        logging.warning(f"Arquivo '{DIRETORIO_ANEXO_I}' não encontrado.")
 
 
 
-
-extrair_conteudo(DIRETORIO_ANEXO_I)
