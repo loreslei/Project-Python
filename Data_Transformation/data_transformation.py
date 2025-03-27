@@ -3,6 +3,7 @@ from zipfile import ZipFile
 import tabula
 import pandas as pd
 from PyPDF2 import PdfReader
+from IPython.display import display
 from tabulate import tabulate
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -44,14 +45,19 @@ def subst_palavras(pdf, arquivo):
 
 def extrair_conteudo(pdf):
     lista_tabelas = tabula.read_pdf(pdf, pages='3-181')
-    print(lista_tabelas)
+    for tabela in lista_tabelas:
+        display(tabela)
 
 
 def transformar_em_csv(pdf, novo_arquivo):
     tabula.convert_into(pdf, novo_arquivo, output_format="csv", pages='3-181')
     subst_palavras(pdf, novo_arquivo)
+
+    #Comprovar Exibição do CSV
+    '''  
     data_frame_anexo = pd.read_csv(novo_arquivo)
     print(tabulate(data_frame_anexo, headers='keys'))
+    '''
 
 def zipar(arquivo, diretorio_zip):
     with ZipFile(diretorio_zip, "w") as zip_file:
