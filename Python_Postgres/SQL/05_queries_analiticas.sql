@@ -6,7 +6,7 @@ SELECT
     dados_operadoras_ativas.razao_social as operadoras,
     dados_2023.descricao AS descricao,
 	dados_2023.datas AS datas,
-    dados_2023.vl_saldo_final::NUMERIC AS despesas
+    dados_2023.vl_saldo_final::NUMERIC - dados_2023.vl_saldo_inicial::NUMERIC AS despesas
 FROM
     dados_operadoras_ativas
 INNER JOIN
@@ -19,7 +19,7 @@ SELECT
     dados_operadoras_ativas.razao_social as operadoras,
     dados_2024.descricao AS descricao,
 	dados_2024.datas AS datas,
-    dados_2024.vl_saldo_final::NUMERIC AS despesas
+    dados_2024.vl_saldo_final::NUMERIC - dados_2024.vl_saldo_inicial::NUMERIC AS despesas
 FROM
     dados_operadoras_ativas
 INNER JOIN
@@ -32,7 +32,7 @@ LIMIT 10;
 
 SELECT
     dados_operadoras_ativas.razao_social as operadoras,
-    SUM(dados_2024.vl_saldo_final::NUMERIC) AS total_despesas
+    SUM(dados_2024.vl_saldo_final::NUMERIC - dados_2024.vl_saldo_inicial::NUMERIC) AS total_despesas
 FROM
     dados_operadoras_ativas
 INNER JOIN
@@ -44,7 +44,7 @@ LIMIT 10;
 
 SELECT
     dados_operadoras_ativas.razao_social as operadoras,
-    SUM(dados_2023.vl_saldo_final::NUMERIC) AS total_despesas
+    SUM(dados_2023.vl_saldo_final::NUMERIC - dados_2023.vl_saldo_inicial::NUMERIC) AS total_despesas
 FROM
     dados_operadoras_ativas
 INNER JOIN
