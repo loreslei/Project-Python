@@ -73,5 +73,5 @@ def buscar(termo):
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5009)
+""" if __name__ == '__main__':
+    app.run(debug=True, port=5009) """
