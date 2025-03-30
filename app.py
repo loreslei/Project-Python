@@ -11,12 +11,12 @@ def ler_todas_operadoras():
                                 user="postgres",
                                 password="12345678",
                                 port="5432",
-                                client_encoding='UTF8')  # Garantir codificação UTF-8
+                                client_encoding='UTF8')  
         cur = conn.cursor()
         cur.execute("SELECT * FROM DADOS_OPERADORAS_ATIVAS")
         resultados = cur.fetchall()
-        colunas = [desc[0] for desc in cur.description]  # Obtém os nomes das colunas
-        operadoras = [dict(zip(colunas, row)) for row in resultados]  # Converte em dicionários
+        colunas = [desc[0] for desc in cur.description]  
+        operadoras = [dict(zip(colunas, row)) for row in resultados]  
         cur.close()
         conn.close()
         return operadoras
@@ -31,7 +31,7 @@ def buscar_operadoras(termo_busca):
                                 user="postgres",
                                 password="12345678",
                                 port="5432",
-                                client_encoding='UTF8')  # Garantir codificação UTF-8
+                                client_encoding='UTF8')  
         cur = conn.cursor()
         cur.execute("SELECT * FROM DADOS_OPERADORAS_ATIVAS WHERE Razao_Social ILIKE %s", (f'%{termo_busca}%',))
         resultados = cur.fetchall()
@@ -53,7 +53,7 @@ def listar_operadoras():
             if valor is None:
                 operadora[chave] = "Dado não disponível"
             elif isinstance(valor, str):
-                operadora[chave] = valor.encode('utf-8').decode('utf-8', 'ignore')  # Ignorar caracteres não decodificáveis
+                operadora[chave] = valor.encode('utf-8').decode('utf-8', 'ignore') 
     response = make_response(jsonify(operadoras))
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
@@ -68,7 +68,7 @@ def buscar(termo):
             if valor is None:
                 resultado[chave] = "Dado não disponível"
             elif isinstance(valor, str):
-                resultado[chave] = valor.encode('utf-8').decode('utf-8', 'ignore')  # Ignorar caracteres não decodificáveis
+                resultado[chave] = valor.encode('utf-8').decode('utf-8', 'ignore')  
     response = make_response(jsonify(resultados))
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
