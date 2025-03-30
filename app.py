@@ -10,7 +10,7 @@ CORS(app)
 
 load_dotenv()
 
-DATABASE_URL = os.getenv('SECRET_URL')
+DATABASE_URL = "postgresql://postgres:xDWLNwAgtyRXWWImgrRPCysPVUsdCiPn@gondola.proxy.rlwy.net:26336/railway"
 def conectar_db():
     
     try:
