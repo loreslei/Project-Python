@@ -1,45 +1,77 @@
-from flask import Flask, request, jsonify
-import csv
+from flask import Flask, jsonify, make_response
+import psycopg2
+import os
 
 app = Flask(__name__)
 
-PATH = './Python_Postgres/dados_operadoras/Relatorio_cadop.csv'
+def ler_todas_operadoras():
+    try:
+        conn = psycopg2.connect(database="operadoras_ativas",
+                                host="localhost",
+                                user="postgres",
+                                password="12345678",
+                                port="5432",
+                                client_encoding='UTF8')  # Garantir codificação UTF-8
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM DADOS_OPERADORAS_ATIVAS")
+        resultados = cur.fetchall()
+        colunas = [desc[0] for desc in cur.description]  # Obtém os nomes das colunas
+        operadoras = [dict(zip(colunas, row)) for row in resultados]  # Converte em dicionários
+        cur.close()
+        conn.close()
+        return operadoras
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return []
 
 def buscar_operadoras(termo_busca):
-    resultados = []
-    with open(PATH, 'r') as arquivo_csv:
-        leitor_csv = csv.DictReader(arquivo_csv)
-        for linha in leitor_csv:
-            for valor in linha.values():
-                if termo_busca.lower() in str(valor).lower():
-                    resultados.append(linha)
-                    break
-    return resultados
+    try:
+        conn = psycopg2.connect(database="operadoras_ativas",
+                                host="localhost",
+                                user="postgres",
+                                password="12345678",
+                                port="5432",
+                                client_encoding='UTF8')  # Garantir codificação UTF-8
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM DADOS_OPERADORAS_ATIVAS WHERE Razao_Social ILIKE %s", (f'%{termo_busca}%',))
+        resultados = cur.fetchall()
+        colunas = [desc[0] for desc in cur.description]
+        operadoras = [dict(zip(colunas, row)) for row in resultados]
+        cur.close()
+        conn.close()
+        return operadoras
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return []
 
-@app.route('/buscar', methods=['GET'])
-def buscar():
-    termo = request.args.get('termo')
+@app.route('/', methods=['GET'])
+@app.route('/operadoras', methods=['GET'])
+def listar_operadoras():
+    operadoras = ler_todas_operadoras()
+    for operadora in operadoras:
+        for chave, valor in operadora.items():
+            if valor is None:
+                operadora[chave] = "Dado não disponível"
+            elif isinstance(valor, str):
+                operadora[chave] = valor.encode('utf-8').decode('utf-8', 'ignore')  # Ignorar caracteres não decodificáveis
+    response = make_response(jsonify(operadoras))
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
+
+@app.route('/operadoras/<termo>', methods=['GET'])
+def buscar(termo):
     if not termo:
         return jsonify({'erro': 'Termo de busca não fornecido'}), 400
     resultados = buscar_operadoras(termo)
-    return jsonify(resultados)
+    for resultado in resultados:
+        for chave, valor in resultado.items():
+            if valor is None:
+                resultado[chave] = "Dado não disponível"
+            elif isinstance(valor, str):
+                resultado[chave] = valor.encode('utf-8').decode('utf-8', 'ignore')  # Ignorar caracteres não decodificáveis
+    response = make_response(jsonify(resultados))
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
+    return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-
-# **3. Criação da Interface Vue.js:**
-#
-# * Desenvolva uma interface web usando Vue.js que consuma a API criada no servidor Python.
-# * A interface deve permitir que o usuário insira um termo de busca e exiba os resultados retornados pela API.
-# * Você pode usar bibliotecas como Axios para fazer as requisições HTTP para o servidor Python.
-#
-# **4. Elaboração da Coleção no Postman:**
-#
-# * **4.3. Demonstração do resultado no Postman:**
-#     * O Postman é uma ferramenta excelente para testar APIs. Crie uma coleção no Postman que contenha as requisições para a rota de busca textual do seu servidor Python.
-#     * Inclua exemplos de requisições com diferentes termos de busca e mostre os resultados retornados pela API.
-#     * Isso ajudará a demonstrar que a API está funcionando corretamente e retornando os dados esperados.
-
-
-
+    app.run(debug=True, port=5009)
