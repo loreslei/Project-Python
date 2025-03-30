@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 
 # URL de conexão fornecida
-DATABASE_URL = "postgres://xDWLNwAgtyRXWWImgrRPCysPVUsdCiPn@gondola.proxy.rlwy.net:26336/railway"
+DATABASE_URL = "postgresql://postgres:xDWLNwAgtyRXWWImgrRPCysPVUsdCiPn@gondola.proxy.rlwy.net:26336/railway"
 
 def conectar_db():
     """Cria e retorna uma conexão com o banco de dados PostgreSQL"""
