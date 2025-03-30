@@ -4,7 +4,6 @@ import tabula
 import pandas as pd
 from PyPDF2 import PdfReader
 from IPython.display import display
-from tabulate import tabulate
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
