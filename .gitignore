@@ -2,4 +2,4 @@
 .idea/
 venv
 .venv
-SECRET.py
+.env
