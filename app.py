@@ -2,7 +2,7 @@ from flask import Flask, jsonify, make_response
 import psycopg2
 from dotenv import load_dotenv
 import os
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
