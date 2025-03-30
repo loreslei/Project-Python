@@ -13,6 +13,10 @@
 
 3. **Visual Studio Code** (ou outro editor de código):
    - Baixe do [site oficial do VS Code](https://code.visualstudio.com/download)
+     
+4. **PostgreSQL 15.2.1+**:
+   - Baixe do [site oficial do PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+   - Durante a instalação, marque "PostgreSQL Server", "pgAdmin 4", "Stack Builder", "Command Line Tools"
 
 
 #### Instalações via Terminal:
