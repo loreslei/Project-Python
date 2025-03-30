@@ -12,7 +12,7 @@ FROM
 INNER JOIN
     dados_2023 ON dados_operadoras_ativas.registro_ans = dados_2023.reg_ans
 WHERE descricao ILIKE 'EVENTOS/SINISTROS CONHECIDOS OU AVISADOS DE ASSISTÊNCIA À SAÚDE' AND EXTRACT(MONTH FROM datas) BETWEEN 10 AND 12
-ORDER BY despesas ASC
+ORDER BY despesas
 LIMIT 10;
 
 SELECT
@@ -25,7 +25,7 @@ FROM
 INNER JOIN
     dados_2024 ON dados_operadoras_ativas.registro_ans = dados_2024.reg_ans
 WHERE descricao ILIKE 'EVENTOS/SINISTROS CONHECIDOS OU AVISADOS DE ASSISTÊNCIA À SAÚDE' AND EXTRACT(MONTH FROM datas) BETWEEN 10 AND 12
-ORDER BY despesas ASC
+ORDER BY despesas
 LIMIT 10;
 
 -- Consulta 2
@@ -39,7 +39,7 @@ INNER JOIN
     dados_2024 ON dados_operadoras_ativas.registro_ans = dados_2024.reg_ans
 WHERE descricao ILIKE 'EVENTOS/SINISTROS CONHECIDOS OU AVISADOS DE ASSISTÊNCIA À SAÚDE'
 GROUP BY dados_operadoras_ativas.razao_social
-ORDER BY total_despesas ASC
+ORDER BY total_despesas
 LIMIT 10;
 
 SELECT
@@ -51,7 +51,7 @@ INNER JOIN
     dados_2023 ON dados_operadoras_ativas.registro_ans = dados_2023.reg_ans
 WHERE descricao ILIKE 'EVENTOS/SINISTROS CONHECIDOS OU AVISADOS DE ASSISTÊNCIA À SAÚDE'
 GROUP BY dados_operadoras_ativas.razao_social
-ORDER BY total_despesas ASC
+ORDER BY total_despesas
 LIMIT 10;
 
 
