@@ -1,11 +1,12 @@
 from flask import Flask, jsonify, make_response
 import psycopg2
 import os
+from SECRET import SECRET_URL
 
 app = Flask(__name__)
 
-# TO-DO criar uma variável pra ocultar esse link
-DATABASE_URL = "postgresql://postgres:xDWLNwAgtyRXWWImgrRPCysPVUsdCiPn@gondola.proxy.rlwy.net:26336/railway"
+
+DATABASE_URL = SECRET_URL
 
 def conectar_db():
     
