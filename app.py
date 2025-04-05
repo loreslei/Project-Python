@@ -60,7 +60,7 @@ def buscar_operadoras(termo_busca):
 @app.route('/', methods=['GET'])
 @app.route('/operadoras', methods=['GET'])
 @cross_origin(origins=["https://vue-interface-gamma.vercel.app",
-              "https://vue-interface-5nuv06mcs-loresleis-projects.vercel.app",
+              "https://vue-interface-ejg3d6e1c-loresleis-projects.vercel.app",
               "http://localhost:8080"]
 , methods=['GET'], headers=['Content-Type', 'Authorization'])
 def listar_operadoras():
@@ -75,7 +75,7 @@ def listar_operadoras():
 
 @app.route('/operadoras/<termo>', methods=['GET'])
 @cross_origin(origins=["https://vue-interface-gamma.vercel.app",
-              "https://vue-interface-5nuv06mcs-loresleis-projects.vercel.app",
+              "https://vue-interface-ejg3d6e1c-loresleis-projects.vercel.app",
               "http://localhost:8080"], methods=['GET'], headers=['Content-Type', 'Authorization'])
 def buscar(termo):
     if not termo:
