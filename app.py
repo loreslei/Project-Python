@@ -61,7 +61,6 @@ def buscar_operadoras(termo_busca):
 @app.route('/operadoras', methods=['GET'])
 @cross_origin(origins="https://vue-interface-gamma.vercel.app",
               "https://vue-interface-5nuv06mcs-loresleis-projects.vercel.app"
-)
 , methods=['GET'], headers=['Content-Type', 'Authorization'])
 def listar_operadoras():
     operadoras = ler_todas_operadoras()
